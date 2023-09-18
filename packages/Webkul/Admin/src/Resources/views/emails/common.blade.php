@@ -1,7 +1,9 @@
 @component('admin::emails.layouts.master')
     <div style="text-align: center;">
         <a href="{{ config('app.url') }}">
-            <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/>
+            <!-- <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/> -->
+            <img src="https://www.kayool.com/assets/logo/kayool.png" alt="{{ config('app.name') }}" style="height: 50px;"/>
+
         </a>
     </div>
 

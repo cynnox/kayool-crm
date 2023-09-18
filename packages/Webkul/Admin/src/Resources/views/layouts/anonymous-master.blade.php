@@ -44,7 +44,9 @@
                 <div class="adjacent-center">
 
                     <div class="brand-logo">
-                        <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/>
+                        <!-- <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/> -->
+                        <img src="https://www.kayool.com/assets/logo/kayool.png" alt="{{ config('app.name') }}"/>
+
 
                         <p>Consumers interaction goes smoothly and efficiently</p>
                     </div>
