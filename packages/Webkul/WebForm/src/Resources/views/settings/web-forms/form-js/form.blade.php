@@ -58,7 +58,7 @@
         <div class="adjacent-center">
             <div class="title-box">
             <!-- <img src="{{ url('vendor/webkul/admin/assets/images/logo.svg') }}" alt="krayin"> -->
-            <img src="https://www.kayool.com/assets/logo/kayool.png" alt="{{ config('app.name') }}" style="height: 50px;"/>
+            <img src="https://www.kayool.com/assets/logo/kayool.png" alt="{{ config('app.name') }}" style="height: 50px; width: unset;"/>
                 <h1 class="web-form-title">{{ $webForm->title }}</h1>
                 <p>{{ $webForm->description }}</p>
             </div>
