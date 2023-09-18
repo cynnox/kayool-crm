@@ -2,7 +2,9 @@
     <div class="navbar-top-left">
         <div class="brand-logo">
             <a href="{{ route('admin.dashboard.index') }}">
-                <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/>
+                <!-- <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/> -->
+                <img src="https://www.kayool.com/assets/logo/kayool.png" alt="{{ config('app.name') }}" style="width: 105px; height: 40px;"/>
+
             </a>
         </div>
     </div>
