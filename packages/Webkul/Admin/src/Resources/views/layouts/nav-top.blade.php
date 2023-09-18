@@ -3,7 +3,7 @@
         <div class="brand-logo">
             <a href="{{ route('admin.dashboard.index') }}">
                 <!-- <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/> -->
-                <img src="asset('vendor/webkul/admin/assets/images/kayool-logo.png')" alt="{{ config('app.name') }}" style="width: 105px; height: 40px;"/>
+                <img src="{{ asset('vendor/webkul/admin/assets/images/kayool-logo.png') }}" alt="{{ config('app.name') }}" style="width: 105px; height: 40px;"/>
 
             </a>
         </div>

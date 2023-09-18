@@ -45,7 +45,7 @@
 
                     <div class="brand-logo">
                         <!-- <img src="{{ asset('vendor/webkul/admin/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"/> -->
-                        <img src="asset('vendor/webkul/admin/assets/images/kayool-logo.png')" alt="{{ config('app.name') }}" style="width: unset;"/>
+                        <img src="{{ asset('vendor/webkul/admin/assets/images/kayool-logo.png') }}" alt="{{ config('app.name') }}" style="width: unset;"/>
 
 
                         <p>Consumers interaction goes smoothly and efficiently</p>
