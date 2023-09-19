@@ -15,7 +15,8 @@
 .dashboard-icon {
     background-image: url("../images/grid-outline.svg");
 }
-.navbar-left ul.menubar li.menu-item:hover .dashboard-icon {
+.navbar-left ul.menubar li.menu-item:hover .dashboard-icon,
+.navbar-left ul.menubar li.menu-item.active .dashboard-icon {
     background-image: url("../images/grid-outline-selected.svg");
 }
 .leads-icon {
