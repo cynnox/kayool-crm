@@ -9,9 +9,9 @@
     background-repeat: no-repeat;
     background-size: auto;
 }
-.dashboard-icon {
-    /* background-position: -371px -2px; */
-}
+/* .dashboard-icon { */
+/* background-position: -371px -2px; */
+/* } */
 .dashboard-icon {
     background-image: url("../images/grid-outline.svg");
 }
