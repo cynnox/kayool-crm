@@ -5,16 +5,16 @@
     font-display: swap;
     font-style: normal;
     font-weight: 500;
-    font-family: 'Roboto';
-    src: url('../fonts/Roboto-Medium.ttf');
+    font-family: "Roboto";
+    src: url("../fonts/Roboto-Medium.ttf");
 }
 
 @font-face {
     font-display: swap;
-    font-family: 'Roboto';
+    font-family: "Roboto";
     font-weight: 400;
     font-style: normal;
-    src: url('../fonts/Roboto-Regular.ttf');
+    src: url("../fonts/Roboto-Regular.ttf");
 }
 
 .icon {
@@ -35,7 +35,7 @@
     height: 100%;
     display: table;
     z-index: 1;
-    background: #F7F8F9;
+    background: #f7f8f9;
 
     .center-box {
         display: table-cell;
@@ -59,7 +59,7 @@
 
                 p {
                     font-size: 20px;
-                    color: #546E7A;
+                    color: #546e7a;
                     margin: 0;
                 }
             }
@@ -69,13 +69,14 @@
                     border: none;
                     padding: 16px;
                     border-radius: 3px;
-                    background-color: #FFFFFF;
-                    box-shadow: rgb(0 0 0 / 10%) 0px 4px 6px -1px, rgb(0 0 0 / 6%) 0px 2px 4px -1px;
+                    background-color: #ffffff;
+                    box-shadow: rgb(0 0 0 / 10%) 0px 4px 6px -1px,
+                        rgb(0 0 0 / 6%) 0px 2px 4px -1px;
 
                     .alert-wrapper {
                         width: 100%;
                         position: relative;
-                    
+
                         .alert {
                             margin-bottom: 10px;
                             padding: 15px 44px 15px 44px;
@@ -89,26 +90,26 @@
                             transform-origin: center top;
                             z-index: $font-weight-medium;
                             text-align: left;
-                    
+
                             &.success {
                                 background: $success-color;
                             }
-                    
+
                             .icon {
                                 position: absolute;
-                    
+
                                 &:first-child {
                                     left: 10px;
                                     top: 15px;
                                 }
-                    
+
                                 &:last-child {
                                     right: 10px;
                                     top: 10px;
                                     cursor: pointer;
                                 }
                             }
-                    
+
                             p {
                                 color: $white;
                                 margin: 0px;
@@ -180,7 +181,7 @@
                             .date-container,
                             .datetime-container {
                                 position: relative;
-                                
+
                                 &::after {
                                     background-image: url("../images/calendar-icon.svg");
                                     width: 24px;
@@ -229,8 +230,8 @@
                         font-size: 24px;
                         border-radius: 4px;
                         border: none;
-                        background: #0E90D9;
-                        color: #FFFFFF;
+                        background: #299d8f;
+                        color: #ffffff;
                         cursor: pointer;
                         transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                         font: inherit;

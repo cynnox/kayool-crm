@@ -208,7 +208,7 @@
 
                     <color-picker
                         name="form_submit_button_color"
-                        value="{{ old('form_submit_button_color') ?? '#0E90D9' }}"
+                        value="{{ old('form_submit_button_color') ?? '#299d8f' }}"
                     ></color-picker>
                 </div>
 

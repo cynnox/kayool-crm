@@ -204,11 +204,11 @@ ul.drag-list {
 }
 .drag-container span div a {
     background: #fff;
-    border: 2px solid #0e90d9;
+    border: 2px solid #299d8f;
     border-radius: 4px;
     box-shadow: 0 4px 6px -1px rgba(14, 144, 217, 0.1),
         0 2px 4px -1px rgba(14, 144, 217, 0.06);
-    color: #0e90d9;
+    color: #299d8f;
     display: block;
     padding: 10px;
     text-align: center;
@@ -717,8 +717,8 @@ body {
     vertical-align: middle;
 }
 .navbar-top .navbar-top-right .quick-create .button {
-    background: #0e90d9;
-    border: 2px solid #0e90d9;
+    background: #299d8f;
+    border: 2px solid #299d8f;
     border-radius: 43px;
     cursor: pointer;
     display: inline-block;
@@ -913,11 +913,11 @@ body {
 }
 .navbar-left ul.menubar li.menu-item ul.sub-menubar li.sub-menu-item.active a,
 .navbar-left ul.menubar li.menu-item ul.sub-menubar li.sub-menu-item:hover a {
-    color: #0e90d9;
+    color: #299d8f;
 }
 .navbar-left ul.menubar li.menu-item.active,
 .navbar-left ul.menubar li.menu-item:hover {
-    box-shadow: inset 4px 0 0 #0e90d9;
+    box-shadow: inset 4px 0 0 #299d8f;
 }
 .navbar-left ul.menubar li.menu-item:hover {
     overflow: visible;
@@ -945,7 +945,7 @@ body {
     ul.sub-menubar
     .sub-menu-item:hover
     .menu-label {
-    color: #0e90d9;
+    color: #299d8f;
 }
 .navbar-left.open {
     overflow-x: auto;
@@ -973,7 +973,7 @@ body {
     width: calc(100% - 1px);
 }
 .navbar-left.open ul.menubar li.menu-item.active .menu-label {
-    color: #0e90d9;
+    color: #299d8f;
 }
 .navbar-left.open ul.menubar li.menu-item.active ul.sub-menubar {
     display: block;
@@ -998,10 +998,10 @@ body {
     ul.sub-menubar
     .sub-menu-item:hover
     .menu-label {
-    color: #0e90d9 !important;
+    color: #299d8f !important;
 }
 .navbar-left.open ul.menubar li.menu-item:hover .menu-label {
-    color: #0e90d9;
+    color: #299d8f;
 }
 .navbar-left .menubar-bottom {
     background-color: #263238;
@@ -1300,7 +1300,7 @@ body {
     background-color: rgba(38, 41, 44, 0.08);
 }
 .adjacent-center .page-content .nav-aside ul li.active a {
-    background: #0e90d9;
+    background: #299d8f;
     color: #fff;
     font-weight: 500;
 }
@@ -1419,7 +1419,7 @@ body {
     width: 100%;
 }
 .lookup-results li span:hover {
-    background-color: #0e90d9;
+    background-color: #299d8f;
     color: #fff;
 }
 .lookup-selected-options {
@@ -1862,7 +1862,7 @@ body {
     z-index: 1;
 }
 .dashboard > h1 ~ .card-filter-container .daterangepicker .btn-success {
-    background-color: #0e90d9;
+    background-color: #299d8f;
     padding: 10px 14px;
 }
 .dashboard > h1 ~ .card-filter-container .daterangepicker .btn-secondary {
@@ -2075,7 +2075,7 @@ body {
     margin-top: 8px;
 }
 .banner {
-    background-color: #0e90d9;
+    background-color: #299d8f;
     color: #fff;
     display: none;
     height: 50px;
@@ -2437,14 +2437,14 @@ body.top-banner .banner {
     .pipeline-stage-container
     .pipeline-stages
     .stage.active {
-    background-color: #0e90d9;
+    background-color: #299d8f;
     color: #fff;
 }
 .pipeline-stage-controls-wrapper
     .pipeline-stage-container
     .pipeline-stages
     .stage.active:before {
-    background: #0e90d9;
+    background: #299d8f;
 }
 .pipeline-stage-controls-wrapper
     .pipeline-stage-container
@@ -2707,7 +2707,7 @@ body.top-banner .banner {
     font-weight: 400;
 }
 .web-form-panel .dropdown-list .dropdown-container ul li ul li:hover {
-    background: #0e90d9;
+    background: #299d8f;
     color: #fff;
 }
 .web-form-panel .dragable-container table tr td {
@@ -2721,7 +2721,7 @@ body.top-banner .banner {
     margin-top: 10px;
 }
 .vuecal__event {
-    background-color: #0e90d9 !important;
+    background-color: #299d8f !important;
     color: #fff !important;
     cursor: pointer;
 }

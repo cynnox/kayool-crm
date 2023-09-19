@@ -121,7 +121,7 @@
             a {
                 font-size: 14px;
                 text-decoration: none;
-                color: #0E90D9;
+                color: #299d8f;
             }
 
             .copyright .separator {
