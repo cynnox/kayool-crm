@@ -44,13 +44,13 @@ class Install extends Command
         $this->loadEnvConfigAtRuntime();
 
         // commented by arun - this will remove all data saved in our database
-        // running `php artisan migrate`
+        // // running `php artisan migrate`
         // $this->warn('Step: Migrating all tables into database...');
         // $migrate = $this->call('migrate:fresh');
         // $this->info($migrate);
 
         // commented by arun - this will remove all data saved in our database
-        // running `php artisan db:seed`
+        // // running `php artisan db:seed`
         // $this->warn('Step: Seeding basic data for Krayin CRM kickstart...');
         // $result = $this->call('db:seed');
         // $this->info($result);
