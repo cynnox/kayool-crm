@@ -95,7 +95,7 @@
         window.serverErrors = [];
 
         @if(isset($errors) && count($errors))
-        window.serverErrors = @json($errors - > getMessages());
+        window.serverErrors = @json($errors -> getMessages());
         @endif
     </script>
 
