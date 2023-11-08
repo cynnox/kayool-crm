@@ -40,6 +40,7 @@
 
     {!! view_render_event('admin.layout.head') !!}
 
+
 </head>
 
 <body style="scroll-behavior: smooth;" @if (app()->getLocale() == 'ar') class="rtl" @endif>
@@ -66,6 +67,11 @@
 
         <div class="content-container" :style="{ paddingLeft: isMenuOpen ? '160px' : ''}">
 
+            <!-- chat bot view included by arun -->
+            <chat-bot></chat-bot>
+
+            <!-- chat bot view end -->
+
             {!! view_render_event('admin.layout.content.before') !!}
 
             @yield('content-wrapper')
@@ -77,27 +83,27 @@
     </div>
 
     <script type="text/javascript">
-        window.flashMessages = [];
+    window.flashMessages = [];
 
-        @foreach(['success', 'warning', 'error', 'info'] as $key)
-        @if($value = session($key))
-        window.flashMessages.push({
-            'type': '{{ $key }}',
-            'message': "{{ $value }}"
-        });
-        @endif
-        @endforeach
+    @foreach(['success', 'warning', 'error', 'info'] as $key)
+    @if($value = session($key))
+    window.flashMessages.push({
+        'type': '{{ $key }}',
+        'message': "{{ $value }}"
+    });
+    @endif
+    @endforeach
 
-        window.serverErrors = [];
+    window.serverErrors = [];
 
-        @if(isset($errors) && count($errors))
-        window.serverErrors = @json($errors -> getMessages());
-        @endif
+    @if(isset($errors) && count($errors))
+    window.serverErrors = @json($errors -> getMessages());
+    @endif
 
-        window._translations = {};
-        window._translations['ui'] = @json(app('Webkul\Core\Helpers\Helper') -> jsonTranslations("UI"));
-        window.baseURL = '{{ url()->to(' / ') }}';
-        window.params = @json(request() -> route() -> parameters());
+    window._translations = {};
+    window._translations['ui'] = @json(app('Webkul\Core\Helpers\Helper') -> jsonTranslations("UI"));
+    window.baseURL = '{{ url()->to(' / ') }}';
+    window.params = @json(request() -> route() -> parameters());
     </script>
 
     <script type="text/javascript" src="{{ asset('vendor/webkul/admin/assets/js/admin.js') }}"></script>
