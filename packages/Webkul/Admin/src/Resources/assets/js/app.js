@@ -27,6 +27,8 @@ import "vue-cal/dist/i18n/tr.es.js";
 
 import VueChatScroll from "vue-chat-scroll";
 
+import chatBot from "./components/chat-bot";
+
 window.moment = require("moment");
 
 window.Vue = Vue;
@@ -68,7 +70,7 @@ Vue.component("draggable", draggable);
 
 Vue.component("vue-cal", VueCal);
 
-Vue.component("chat-bot", require("./components/chat-bot.vue").default);
+Vue.component("chatBot", chatBot);
 
 $(function () {
     let app = new Vue({
