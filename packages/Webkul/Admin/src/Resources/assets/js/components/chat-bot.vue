@@ -212,12 +212,12 @@
                         v-for="msg in messages"
                         class="message-item"
                         :class="{
-                            'message-item-right': msg?.sender == 0,
-                            'message-item-left': msg?.sender == 1,
+                            'message-item-right': msg.sender == 0,
+                            'message-item-left': msg.sender == 1,
                         }"
                     >
-                        <div v-if="msg?.message">{{ msg?.message }}</div>
-                        <div v-if="!msg?.message" class="loader"></div>
+                        <div v-if="msg.message">{{ msg.message }}</div>
+                        <div v-if="!msg.message" class="loader"></div>
                     </div>
                 </div>
                 <div class="message-input-container">
