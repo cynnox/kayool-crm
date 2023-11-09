@@ -29,10 +29,6 @@ mix.webpackConfig({
             vue$: "vue/dist/vue.runtime.js",
         },
     },
-    stats: {
-        warnings: true,
-        children: true,
-    },
 });
 
 if (!mix.inProduction()) {

@@ -262,7 +262,7 @@
 
 <script>
 export default {
-    name: "chatBot",
+    name: "ChatBot",
     mounted() {
         console.log("Chat bot mounted...");
     },
