@@ -251,8 +251,8 @@
             <div class="chat-box-footer">
                 <b
                     >Powered by
-                    <a href="https://connectnow.ai" target="_blank"
-                        >ConnectNow</a
+                    <a href="https://www.kayool.com" target="_blank"
+                        >Kayool</a
                     ></b
                 >
             </div>
@@ -265,6 +265,19 @@ export default {
     name: "ChatBot",
     mounted() {
         console.log("Chat bot mounted...");
+        // fetch("/admin/api/dashboard/user", {
+        //     method: "GET",
+        //     headers: {
+        //         "X-CSRF-TOKEN": document.head.querySelector(
+        //             'meta[name="csrf-token"]'
+        //         ).content,
+        //     },
+        // })
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //     })
+        //     .catch((err) => console.error(err));
     },
     data() {
         return {
@@ -294,6 +307,11 @@ export default {
             if (!this.message) {
                 return;
             }
+            let req = {
+                sender: "test_user",
+                message: this.message,
+                metadata: {},
+            };
             this.messages.push({ message: this.message, sender: 0 });
             this.message = "";
             let msg = {
@@ -302,10 +320,21 @@ export default {
             };
             setTimeout(() => {
                 this.messages.push(msg);
-                setTimeout(() => {
-                    msg.message =
-                        "Thank you for contacting us. We will get back to you soon..";
-                }, 2000);
+                fetch("http://178.128.85.1:5005/webhooks/rest/webhook", {
+                    method: "POST",
+                    body: JSON.stringify(req),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data);
+                        if (data.length > 0) {
+                            msg.message = data[0].text;
+                        } else {
+                            msg.message =
+                                "Sorry, I don’t have a data source related to your question or request. I am still under development , but I am learning new things every day. I hope that we can have many interesting and informative conversations in the future.";
+                        }
+                    })
+                    .catch((err) => console.error(err));
             }, 100);
         },
     },
