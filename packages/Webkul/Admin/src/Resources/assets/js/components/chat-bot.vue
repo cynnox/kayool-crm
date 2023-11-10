@@ -334,7 +334,11 @@ export default {
                                 "Sorry, I don’t have a data source related to your question or request. I am still under development , but I am learning new things every day. I hope that we can have many interesting and informative conversations in the future.";
                         }
                     })
-                    .catch((err) => console.error(err));
+                    .catch((err) => {
+                        console.error(err);
+                        msg.message =
+                            "Sorry, I don’t have a data source related to your question or request. I am still under development , but I am learning new things every day. I hope that we can have many interesting and informative conversations in the future.";
+                    });
             }, 100);
         },
     },
