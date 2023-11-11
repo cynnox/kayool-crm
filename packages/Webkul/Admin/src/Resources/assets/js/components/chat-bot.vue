@@ -2,7 +2,7 @@
 .chat-button-container {
     position: absolute;
     z-index: 99999;
-    bottom: 50px;
+    bottom: 10px;
     right: 0px;
 }
 .round-button {
@@ -10,13 +10,28 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    border-radius: 20px;
+    border-radius: 100%;
     margin: 20px;
     cursor: pointer;
     padding-top: 5px;
-    height: 40px;
-    width: 40px;
+    height: 50px;
+    width: 50px;
+    font-size: 20px;
+}
+.button-shadow {
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+}
+.bubble-text-animation {
+    position: relative;
+    font-size: 20px;
+    animation: bubble 1s infinite linear;
+}
+@keyframes bubble {
+    50% {
+        font-size: 25px;
+    }
 }
 .chat-button {
     color: white;
@@ -33,6 +48,18 @@
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+}
+.badge {
+    color: white;
+    background-color: #e02323;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 100%;
+    font-size: 13px;
+    position: absolute;
+    top: -12px;
+    right: -7px;
+    font-weight: bold;
 }
 .chat-box-header {
     height: 100px;
@@ -147,22 +174,25 @@
 <template>
     <div class="chat-button-container">
         <button
-            class="chat-button round-button"
+            class="chat-button round-button button-shadow"
             @click="onChatBoxOpenBtnClick"
             id="chatOpenBtn"
             v-if="!chatBoxOpen"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="1em"
-                viewBox="0 0 512 512"
-                fill="currentColor"
-            >
-                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                <path
-                    d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z"
-                />
-            </svg>
+            <div :class="{ 'bubble-text-animation': !chatBoxOpened }">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="1em"
+                    viewBox="0 0 512 512"
+                    fill="currentColor"
+                >
+                    <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                    <path
+                        d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z"
+                    />
+                </svg>
+                <span v-if="!chatBoxOpened" class="badge">1</span>
+            </div>
         </button>
 
         <!-- chat box -->
@@ -175,7 +205,7 @@
                             height="1em"
                             viewBox="0 0 512 512"
                             fill="currentColor"
-                            style="margin-top: 7px"
+                            style="margin-top: 10px"
                         >
                             <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                             <path
@@ -284,11 +314,13 @@ export default {
             chatBoxOpen: false,
             message: "",
             messages: [],
+            chatBoxOpened: false,
         };
     },
     methods: {
         onChatBoxOpenBtnClick() {
             this.chatBoxOpen = true;
+            this.chatBoxOpened = true;
             if (this.messages.length == 0) {
                 setTimeout(() => {
                     this.messages.push({
