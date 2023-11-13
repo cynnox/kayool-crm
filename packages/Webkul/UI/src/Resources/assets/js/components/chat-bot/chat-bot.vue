@@ -352,7 +352,7 @@ export default {
             };
             setTimeout(() => {
                 this.messages.push(msg);
-                fetch("http://178.128.85.1:5005/webhooks/rest/webhook", {
+                fetch("https://chat.kayool.com/webhooks/rest/webhook", {
                     method: "POST",
                     body: JSON.stringify(req),
                 })
