@@ -7,7 +7,10 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "install:all": "npm install && npm --prefix ./packages/Webkul/Admin install && npm --prefix ./packages/Webkul/UI install && npm --prefix ./packages/Webkul/WebForm install",
+        "dev:all": "npm run dev && npm --prefix ./packages/Webkul/Admin run dev && npm --prefix ./packages/Webkul/UI run dev && npm --prefix ./packages/Webkul/WebForm run dev",
+        "prod:all": "npm run prod && npm --prefix ./packages/Webkul/Admin run prod && npm --prefix ./packages/Webkul/UI run prod && npm --prefix ./packages/Webkul/WebForm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",

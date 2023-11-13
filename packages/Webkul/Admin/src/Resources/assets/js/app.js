@@ -25,10 +25,6 @@ import zh_CN from "vee-validate/dist/locale/zh_CN";
 import "vue-cal/dist/i18n/ar.es.js";
 import "vue-cal/dist/i18n/tr.es.js";
 
-import VueChatScroll from "vue-chat-scroll";
-
-import ChatBot from "./components/chat-bot.vue";
-
 window.moment = require("moment");
 
 window.Vue = Vue;
@@ -64,13 +60,9 @@ Vue.use(VueTimeago, {
     },
 });
 
-Vue.use(VueChatScroll);
-
 Vue.component("draggable", draggable);
 
 Vue.component("vue-cal", VueCal);
-
-Vue.component("chatBot", ChatBot);
 
 $(function () {
     let app = new Vue({
