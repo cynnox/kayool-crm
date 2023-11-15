@@ -110,7 +110,12 @@
     background-color: white;
     padding: 5px;
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+.message-item img {
+    object-fit: contain;
+    width: 100%;
+    border-radius: 3px;
 }
 .message-item-left {
     border-radius: 10px 10px 10px 0px;
@@ -247,7 +252,13 @@
                         }"
                     >
                         <div v-if="msg.message">{{ msg.message }}</div>
-                        <div v-if="!msg.message" class="loader"></div>
+                        <div v-if="msg.image">
+                            <img v-bind:src="msg.image" />
+                        </div>
+                        <div
+                            v-if="!(msg.message || msg.image)"
+                            class="loader"
+                        ></div>
                     </div>
                 </div>
                 <div class="message-input-container">
@@ -326,6 +337,7 @@ export default {
                     this.messages.push({
                         message: "Hi, How can i help you?",
                         sender: 1,
+                        image: "",
                     });
                 }, 500);
             }
@@ -340,17 +352,17 @@ export default {
                 return;
             }
             let req = {
-                sender: "test_user",
+                sender: "test_user_8",
                 message: this.message,
                 metadata: {},
             };
-            this.messages.push({ message: this.message, sender: 0 });
+            this.messages.push({ message: this.message, sender: 0, image: "" });
             this.message = "";
-            let msg = {
-                message: "",
-                sender: 1,
-            };
             setTimeout(() => {
+                let msg = {
+                    message: "",
+                    sender: 1,
+                };
                 this.messages.push(msg);
                 fetch("https://chat.kayool.com/webhooks/rest/webhook", {
                     method: "POST",
@@ -360,7 +372,19 @@ export default {
                     .then((data) => {
                         console.log(data);
                         if (data.length > 0) {
-                            msg.message = data[0].text;
+                            for (let index = 0; index < data.length; index++) {
+                                const m = data[index];
+                                if (index == 0) {
+                                    msg.message = m.text;
+                                    msg.image = m.image;
+                                } else {
+                                    this.messages.push({
+                                        message: m.text,
+                                        sender: 1,
+                                        image: m.image,
+                                    });
+                                }
+                            }
                         } else {
                             msg.message =
                                 "Sorry, I don’t have a data source related to your question or request. I am still under development , but I am learning new things every day. I hope that we can have many interesting and informative conversations in the future.";
