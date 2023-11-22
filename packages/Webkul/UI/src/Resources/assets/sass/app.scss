@@ -1982,7 +1982,17 @@ ol.breadcrumb {
     grid-row-gap: 15px;
     grid-auto-rows: auto;
     grid-column-gap: 15px;
-    @include display-grid(repeat(3, 1fr));
+    @include display-grid(75vw);
+}
+@media (min-width: 600px) {
+    .row-grid-3 {
+        @include display-grid(repeat(2, 1fr));
+    }
+}
+@media (min-width: 900px) {
+    .row-grid-3 {
+        @include display-grid(repeat(3, 1fr));
+    }
 }
 
 .bar {

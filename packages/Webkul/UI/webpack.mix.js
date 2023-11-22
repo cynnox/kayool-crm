@@ -1,26 +1,28 @@
 const mix = require("laravel-mix");
 
-if (mix == 'undefined') {
+if (mix == "undefined") {
     const { mix } = require("laravel-mix");
 }
 
 require("laravel-mix-merge-manifest");
 
 if (mix.inProduction()) {
-    var publicPath = 'publishable/assets';
+    var publicPath = "publishable/assets";
 } else {
     var publicPath = "../../../public/vendor/webkul/ui/assets";
+    // auto refresh browser while save changes
+    mix.browserSync("127.0.0.1:8000");
 }
 
 mix.setPublicPath(publicPath).mergeManifest();
 mix.disableNotifications();
 
-mix.inProduction()
+mix.inProduction();
 
 mix.js(
     [
         __dirname + "/src/Resources/assets/js/app.js",
-        __dirname + "/src/Resources/assets/js/dropdown.js"
+        __dirname + "/src/Resources/assets/js/dropdown.js",
     ],
     "js/ui.js"
 )
@@ -28,18 +30,19 @@ mix.js(
     .copy(__dirname + "/src/Resources/assets/fonts", publicPath + "/fonts")
     .sass(__dirname + "/src/Resources/assets/sass/app.scss", "css/ui.css")
     .options({
-        processCssUrls: false
-    }).vue();
-    
+        processCssUrls: false,
+    })
+    .vue();
+
 mix.webpackConfig({
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.runtime.js'
-        }
-    }
+            vue$: "vue/dist/vue.runtime.js",
+        },
+    },
 });
 
-if (! mix.inProduction()) {
+if (!mix.inProduction()) {
     mix.sourceMaps();
 }
 

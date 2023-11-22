@@ -1406,7 +1406,6 @@ body {
 
         ~ .card-filter-container {
             z-index: 1;
-            float: right;
             color: $secondary-color;
 
             .daterangepicker {
@@ -1607,6 +1606,16 @@ body {
                         display: inline;
                     }
                 }
+            }
+        }
+    }
+}
+
+@media (min-width: 600px) {
+    .dashboard {
+        > h1 {
+            ~ .card-filter-container {
+                float: right;
             }
         }
     }
