@@ -54,6 +54,8 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
                 'prefix'    => 'account',
                 'namespace' => 'Webkul\Admin\Http\Controllers\User'
             ], function () {
+                // Route::get('/user', 'AccountController@get')->name('admin.user.account.index');
+
                 Route::get('', 'AccountController@edit')->name('admin.user.account.edit');
 
                 Route::put('update', 'AccountController@update')->name('admin.user.account.update');

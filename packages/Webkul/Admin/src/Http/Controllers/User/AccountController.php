@@ -8,6 +8,14 @@ use Webkul\Admin\Http\Controllers\Controller;
 
 class AccountController extends Controller
 {
+
+    /**
+     * Return logined user details
+     */
+    // public function get(){
+    //     return response()->json(auth()->guard('user')->user());
+    // }
+
     /**
      * Show the form for creating a new resource.
      *
