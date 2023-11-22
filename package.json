@@ -10,11 +10,7 @@
         "production": "mix --production",
         "install:all": "npm install && npm --prefix ./packages/Webkul/Admin install && npm --prefix ./packages/Webkul/UI install && npm --prefix ./packages/Webkul/WebForm install",
         "dev:all": "npm run dev && npm --prefix ./packages/Webkul/Admin run dev && npm --prefix ./packages/Webkul/UI run dev && npm --prefix ./packages/Webkul/WebForm run dev",
-        "prod:all": "npm run prod && npm --prefix ./packages/Webkul/Admin run prod && npm --prefix ./packages/Webkul/UI run prod && npm --prefix ./packages/Webkul/WebForm run prod",
-        "update:prod:all": "npm run update:prod:admin && npm run update:prod:ui && npm run update:prod:web-form",
-        "update:prod:admin": "rm -rf public/vendor/webkul/admin/assets/* && cp -r packages/Webkul/Admin/publishable/assets/* public/vendor/webkul/admin/assets/",
-        "update:prod:ui": "rm -rf public/vendor/webkul/ui/assets/* && cp -r packages/Webkul/UI/publishable/assets/* public/vendor/webkul/ui/assets/",
-        "update:prod:web-form": "rm -rf public/vendor/webkul/web-form/assets/* && cp -r packages/Webkul/WebForm/publishable/assets/* public/vendor/webkul/web-form/assets/"
+        "prod:all": "npm run prod && npm --prefix ./packages/Webkul/Admin run prod && npm --prefix ./packages/Webkul/UI run prod && npm --prefix ./packages/Webkul/WebForm run prod"
     },
     "devDependencies": {
         "axios": "^0.21",
