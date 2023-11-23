@@ -658,6 +658,21 @@ body {
     }
 }
 
+@media (max-width: 425px) {
+    .anonymous-layout-container {
+        .center-box {
+            .adjacent-center {
+                width: unset;
+                .panel {
+                    .panel-body {
+                        padding: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .adjacent-center {
     .page-header {
         width: 1000px !important;
