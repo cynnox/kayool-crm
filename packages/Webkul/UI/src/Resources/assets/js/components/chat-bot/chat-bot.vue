@@ -2,8 +2,8 @@
 .chat-button-container {
     position: fixed;
     z-index: 99999;
-    bottom: 10px;
-    right: 0px;
+    bottom: 15px;
+    right: 10px;
 }
 .chat-button-container button{
         border: none;
