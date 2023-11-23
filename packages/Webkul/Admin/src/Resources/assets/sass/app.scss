@@ -1625,7 +1625,13 @@ body {
         }
     }
 }
-
+@media (max-width: 600px) {
+    .dashboard {
+        .dashboard-content {
+            pointer-events: none;
+        }
+    }
+}
 @media (min-width: 600px) {
     .dashboard {
         > h1 {

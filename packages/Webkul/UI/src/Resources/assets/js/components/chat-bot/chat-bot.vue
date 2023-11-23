@@ -178,7 +178,7 @@
 }
 .close-button{
     color: black;font-weight: bold; 
-    font-size: 25px;
+    font-size: 20px;
 }
 
 </style>
