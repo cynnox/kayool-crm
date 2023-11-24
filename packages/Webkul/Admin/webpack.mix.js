@@ -10,6 +10,8 @@ if (mix.inProduction()) {
     var publicPath = "publishable/assets";
 } else {
     var publicPath = "../../../public/vendor/webkul/admin/assets";
+    // auto refresh browser while save changes
+    mix.browserSync("127.0.0.1:8000");
 }
 
 mix.setPublicPath(publicPath).mergeManifest();

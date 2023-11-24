@@ -1,19 +1,20 @@
 <style>
 .chat-button-container {
     position: fixed;
-    z-index: 99999;
-    bottom: 10px;
-    right: 0px;
+    z-index: 1000;
+    bottom: 15px;
+    right: 10px;
+}
+.chat-button-container button{
+        border: none;
+    background-color: transparent;
 }
 .round-button {
-    border: none;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 100%;
-    margin: 20px;
     cursor: pointer;
-    padding-top: 5px;
     height: 50px;
     width: 50px;
     font-size: 20px;
@@ -25,7 +26,6 @@
 }
 .bubble-text-animation {
     position: relative;
-    font-size: 20px;
     animation: bubble 1s infinite linear;
 }
 @keyframes bubble {
@@ -38,7 +38,7 @@
     background-color: #299d8f;
 }
 .chat-container {
-    height: 80vh;
+    min-height: 300px;
     width: 350px;
     background-color: white;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
@@ -57,14 +57,17 @@
     border-radius: 100%;
     font-size: 13px;
     position: absolute;
-    top: -12px;
-    right: -7px;
+    top: 0px;
+    right: 0px;
     font-weight: bold;
 }
 .chat-box-header {
     height: 100px;
     display: flex;
     border-bottom: 1px solid #eaeef3;
+}
+.chat-box-header .chat-button{
+    margin: 15px;
 }
 .chat-box-content {
     background-color: #eaeef3;
@@ -89,22 +92,24 @@
     margin: 0;
 }
 .message-preview {
-    flex: 1;
+    flex: 1 1 0;
     padding: 10px;
-    max-height: 54vh;
     overflow-y: scroll;
 }
 .message-input-container {
     display: flex;
+    border: 1px solid #ced4da !important;
+    border-left: 0;
+    border-right: 0;
+    background-color: #fff;
 }
 .message-input-container input {
     width: 100%;
     height: 40px;
-    border: 1px solid #ced4da;
-    /* border-radius: 0.25rem; */
+    border-radius: 0;
     color: #495057;
     flex: 1;
-    border-right: 0;
+    border: none;
 }
 .message-item {
     background-color: white;
@@ -129,12 +134,9 @@
     color: grey;
     height: 40px;
     width: 40px;
-    border: none;
     cursor: not-allowed;
     font-size: 17px;
-    border: 1px solid #ced4da;
-    border-left: 0;
-    background-color: white;
+    margin-right: 5px;
 }
 .send-msg-button.enabled {
     color: #299d8f;
@@ -174,17 +176,21 @@
         -webkit-mask-position: 0% 100%, 50% 0%, 100% 0%;
     }
 }
+.close-button{
+    color: black;font-weight: bold; 
+    font-size: 20px;
+}
+
 </style>
 
 <template>
     <div class="chat-button-container">
         <button
-            class="chat-button round-button button-shadow"
             @click="onChatBoxOpenBtnClick"
             id="chatOpenBtn"
             v-if="!chatBoxOpen"
         >
-            <div :class="{ 'bubble-text-animation': !chatBoxOpened }">
+            <div class="chat-button round-button button-shadow" :class="{ 'bubble-text-animation': !chatBoxOpened }">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="1em"
@@ -201,24 +207,23 @@
         </button>
 
         <!-- chat box -->
-        <div v-if="chatBoxOpen" class="chat-container">
+        <div v-if="chatBoxOpen" class="chat-container" :style="{ height: chatBoxHeight }">
+            <!-- header -->
             <div class="chat-box-header">
-                <div>
-                    <div class="chat-button round-button">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="1em"
-                            viewBox="0 0 512 512"
-                            fill="currentColor"
-                            style="margin-top: 10px"
-                        >
-                            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                            <path
-                                d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z"
-                            />
-                        </svg>
-                    </div>
+                <div class="chat-button round-button">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="1em"
+                        viewBox="0 0 512 512"
+                        fill="currentColor"
+                    >
+                        <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                        <path
+                            d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z"
+                        />
+                    </svg>
                 </div>
+
                 <div style="flex: 1">
                     <h2 class="user-name">ChatBot</h2>
                     <h5 class="online-status">Online</h5>
@@ -226,21 +231,13 @@
                 <div>
                     <button
                         @click="onChatBoxCloseBtnClick"
-                        class="round-button"
+                        class="round-button close-button"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="1em"
-                            viewBox="0 0 384 512"
-                        >
-                            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                            <path
-                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-                            />
-                        </svg>
+                    &#x2715
                     </button>
                 </div>
             </div>
+            <!-- messages -->
             <div class="chat-box-content">
                 <div class="message-preview" v-chat-scroll>
                     <div
@@ -267,6 +264,8 @@
                         placeholder="Ask something here.."
                         v-model="message"
                         @keyup.enter="onSendMessage"
+                        v-on:focus="adjustDialogHeight"
+                        v-on:blur="adjustDialogHeight"
                     />
                     <button
                         class="send-msg-button"
@@ -289,6 +288,7 @@
                     </button>
                 </div>
             </div>
+            <!-- footer -->
             <div class="chat-box-footer">
                 <b
                     >Powered by
@@ -319,6 +319,13 @@ export default {
         //         console.log(data);
         //     })
         //     .catch((err) => console.error(err));
+
+        // Listen for the keyboard open event
+        window.addEventListener('resize', this.adjustDialogHeight.bind(this));
+    },
+    destroyed() {
+        console.log('chatbot destroyed');
+         window.removeEventListener('resize', this.adjustDialogHeight.bind(this));
     },
     data() {
         return {
@@ -326,6 +333,7 @@ export default {
             message: "",
             messages: [],
             chatBoxOpened: false,
+            chatBoxHeight: `calc(${window.innerHeight}px * 0.80)`,
         };
     },
     methods: {
@@ -397,6 +405,10 @@ export default {
                     });
             }, 100);
         },
+        adjustDialogHeight() {
+            // Calculate the available space for the dialog (subtract keyboard height)
+            this.chatBoxHeight = `calc(${window.innerHeight}px * 0.80)`;
+        }
     },
 };
 </script>

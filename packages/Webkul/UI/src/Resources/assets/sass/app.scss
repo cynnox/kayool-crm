@@ -389,6 +389,11 @@ h5 {
                     display: block;
                     margin-top: 20px;
                 }
+
+                @media (max-width: 600px) {
+                    position: relative;
+                    padding: 40px 0px;
+                }
             }
         }
     }
@@ -516,6 +521,10 @@ h5 {
                     text-align: center;
                 }
             }
+        }
+
+        @media (max-width: 768px) {
+            table-layout: auto;
         }
     }
 
@@ -646,7 +655,7 @@ h5 {
 
     .datagrid-filters {
         width: 100%;
-        @include display-grid(repeat(2, auto));
+        @include display-grid(repeat(1, auto));
 
         .filter-right {
             text-align: right;
@@ -753,6 +762,56 @@ h5 {
         button {
             height: 40px;
             vertical-align: middle;
+        }
+    }
+}
+
+@media (min-width: 600px) {
+    .table {
+        .datagrid-filters {
+            @include display-grid(repeat(2, auto));
+        }
+    }
+}
+@media (max-width: 600px) {
+    .table {
+        .datagrid-filters {
+            .search-filter {
+                width: 100%;
+
+                input {
+                    width: 100% !important;
+                }
+            }
+            .filter-right {
+                text-align: unset;
+
+                .dropdown-filters,
+                .switch-pipeline-container {
+                    margin-top: 6px;
+                    width: 100%;
+                }
+                .switch-view-container {
+                    margin-top: 6px;
+                    width: unset;
+                }
+                .filter-btn {
+                    margin-top: 6px;
+                    width: 63%;
+
+                    .grid-dropdown-header {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        .tabs-container {
+            display: block;
+            margin: 0;
+            margin-top: 10px;
+        }
+        .filtered-tags {
+            margin: 0;
         }
     }
 }
@@ -1201,7 +1260,7 @@ h5 {
     bottom: 10px;
     right: 10px;
     position: fixed;
-    z-index: 100;
+    z-index: 10000;
 
     .alert {
         width: 648px;
@@ -1256,6 +1315,12 @@ h5 {
             color: $white;
             margin: 0px;
             font-size: $font-size-md;
+        }
+
+        @media (max-width: 600px) {
+            width: 80%;
+            margin-left: 0;
+            left: 10%;
         }
     }
 }
@@ -1463,6 +1528,15 @@ modal {
     overflow-x: hidden;
     animation: jelly 0.5s ease-in-out;
     @include border-radius(8px);
+
+    @media (max-width: 600px) {
+        width: 70vw;
+        margin-left: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 30%;
+        animation: none;
+    }
 
     .modal-header {
         z-index: 10;
@@ -1982,7 +2056,17 @@ ol.breadcrumb {
     grid-row-gap: 15px;
     grid-auto-rows: auto;
     grid-column-gap: 15px;
-    @include display-grid(repeat(3, 1fr));
+    @include display-grid(75vw);
+}
+@media (min-width: 600px) {
+    .row-grid-3 {
+        @include display-grid(repeat(2, 1fr));
+    }
+}
+@media (min-width: 900px) {
+    .row-grid-3 {
+        @include display-grid(repeat(3, 1fr));
+    }
 }
 
 .bar {

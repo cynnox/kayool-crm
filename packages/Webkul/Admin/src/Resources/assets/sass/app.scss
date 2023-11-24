@@ -36,9 +36,10 @@ body {
     left: 0;
     right: 0;
     z-index: 5;
+    display: flex;
+    justify-content: space-between;
 
     .navbar-top-left {
-        width: 50%;
         height: 60px;
         display: inline-block;
         vertical-align: middle;
@@ -49,7 +50,6 @@ body {
     }
 
     .navbar-top-right {
-        width: 50%;
         height: 60px;
         padding: 10px;
         text-align: right;
@@ -658,6 +658,21 @@ body {
     }
 }
 
+@media (max-width: 425px) {
+    .anonymous-layout-container {
+        .center-box {
+            .adjacent-center {
+                width: unset;
+                .panel {
+                    .panel-body {
+                        padding: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .adjacent-center {
     .page-header {
         width: 1000px !important;
@@ -666,7 +681,8 @@ body {
     }
 
     .page-content {
-        width: 1000px !important;
+        width: 100% !important;
+        max-width: 1000px;
         display: block !important;
         margin: auto;
 
@@ -970,6 +986,10 @@ body {
                 }
             }
         }
+        @media (max-width: 768px) {
+            float: none;
+            width: 100%;
+        }
     }
 
     .lead-content-right {
@@ -979,6 +999,11 @@ body {
 
         .tabs-content {
             margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            float: none;
+            width: 100%;
         }
     }
 }
@@ -1110,7 +1135,8 @@ body {
     .section-tag {
         position: relative;
         display: inline-block;
-        width: 100%;
+        // width: 100%;
+        width: -webkit-fill-available;
         margin-left: 50px;
         margin-bottom: 20px;
 
@@ -1406,7 +1432,6 @@ body {
 
         ~ .card-filter-container {
             z-index: 1;
-            float: right;
             color: $secondary-color;
 
             .daterangepicker {
@@ -1607,6 +1632,22 @@ body {
                         display: inline;
                     }
                 }
+            }
+        }
+    }
+}
+@media (max-width: 600px) {
+    .dashboard {
+        .dashboard-content {
+            pointer-events: none;
+        }
+    }
+}
+@media (min-width: 600px) {
+    .dashboard {
+        > h1 {
+            ~ .card-filter-container {
+                float: right;
             }
         }
     }
