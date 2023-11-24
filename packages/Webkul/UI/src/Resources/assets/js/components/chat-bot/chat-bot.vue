@@ -1,7 +1,7 @@
 <style>
 .chat-button-container {
     position: fixed;
-    z-index: 99999;
+    z-index: 1000;
     bottom: 15px;
     right: 10px;
 }

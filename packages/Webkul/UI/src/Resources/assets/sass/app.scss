@@ -522,6 +522,10 @@ h5 {
                 }
             }
         }
+
+        @media (max-width: 768px) {
+            table-layout: auto;
+        }
     }
 
     .form-group {
@@ -1256,7 +1260,7 @@ h5 {
     bottom: 10px;
     right: 10px;
     position: fixed;
-    z-index: 100;
+    z-index: 10000;
 
     .alert {
         width: 648px;
@@ -1311,6 +1315,12 @@ h5 {
             color: $white;
             margin: 0px;
             font-size: $font-size-md;
+        }
+
+        @media (max-width: 600px) {
+            width: 80%;
+            margin-left: 0;
+            left: 10%;
         }
     }
 }
@@ -1518,6 +1528,15 @@ modal {
     overflow-x: hidden;
     animation: jelly 0.5s ease-in-out;
     @include border-radius(8px);
+
+    @media (max-width: 600px) {
+        width: 70vw;
+        margin-left: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 30%;
+        animation: none;
+    }
 
     .modal-header {
         z-index: 10;

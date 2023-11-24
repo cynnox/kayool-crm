@@ -681,7 +681,8 @@ body {
     }
 
     .page-content {
-        width: 1000px !important;
+        width: 100% !important;
+        max-width: 1000px;
         display: block !important;
         margin: auto;
 
@@ -985,6 +986,10 @@ body {
                 }
             }
         }
+        @media (max-width: 768px) {
+            float: none;
+            width: 100%;
+        }
     }
 
     .lead-content-right {
@@ -994,6 +999,11 @@ body {
 
         .tabs-content {
             margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            float: none;
+            width: 100%;
         }
     }
 }
@@ -1125,7 +1135,8 @@ body {
     .section-tag {
         position: relative;
         display: inline-block;
-        width: 100%;
+        // width: 100%;
+        width: -webkit-fill-available;
         margin-left: 50px;
         margin-bottom: 20px;
 
