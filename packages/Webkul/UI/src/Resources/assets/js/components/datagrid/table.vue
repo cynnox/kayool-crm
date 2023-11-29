@@ -29,13 +29,18 @@
                 </template>
             </filter-component>
 
-            <table v-if="tableData.records.total">
-                <thead-component></thead-component>
+            <div
+                v-if="tableData.records.total"
+                style="width: 100%; overflow-x: scroll"
+            >
+                <table>
+                    <thead-component></thead-component>
 
-                <tbody-component
-                    :result-loaded="resultLoaded"
-                ></tbody-component>
-            </table>
+                    <tbody-component
+                        :result-loaded="resultLoaded"
+                    ></tbody-component>
+                </table>
+            </div>
 
             <div class="empty-table" v-else>
                 <div>

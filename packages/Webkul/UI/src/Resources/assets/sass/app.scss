@@ -221,6 +221,10 @@ h5 {
         box-shadow: none;
         opacity: 1;
     }
+
+    @media (max-width: 600px) {
+        text-align: center;
+    }
 }
 
 .dropdown-list {
@@ -432,6 +436,7 @@ h5 {
                 text-transform: capitalize;
                 font-weight: $font-weight-medium;
                 border-bottom: 1px solid rgba(193, 194, 195, 0.5);
+                text-wrap: wrap;
 
                 &.master-checkbox {
                     width: 41px;
@@ -473,6 +478,10 @@ h5 {
                     border-bottom: none;
                     background-color: rgba(255, 255, 255, 0.5);
                     word-break: break-all;
+                    @media (max-width: 600px) {
+                        text-wrap: nowrap !important;
+                        word-break: keep-all;
+                    }
 
                     &.empty {
                         text-align: center;
@@ -731,6 +740,10 @@ h5 {
 
         .tabs-right-container {
             text-align: right;
+
+            @media (max-width: 600px) {
+                text-align: unset;
+            }
 
             section {
                 display: inline-block;
@@ -1422,6 +1435,10 @@ h5 {
                 }
             }
         }
+    }
+
+    @media (max-width: 600px) {
+        height: unset;
     }
 }
 
