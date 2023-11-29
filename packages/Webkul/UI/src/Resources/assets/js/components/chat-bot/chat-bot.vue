@@ -376,7 +376,7 @@ export default {
                     sender: 1,
                 };
                 this.messages.push(msg);
-                fetch("/admin/api/chatbot/send", {
+                fetch("/admin/api/chatbot/message", {
                     method: "POST",
                     body: JSON.stringify(req),
                     headers: {

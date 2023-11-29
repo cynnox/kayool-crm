@@ -53,7 +53,7 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
                     'prefix'=>'chatbot',
                     'namespace'=> 'Webkul\Admin\Http\Controllers\ChatBot'
                  ],function(){
-                     Route::post('/send', 'ChatBotController@sendMessage')->name('admin.user.chatbot.sendMessage');
+                     Route::post('/message', 'ChatBotController@sendMessage')->name('admin.user.chatbot.sendMessage');
                 });
 
                 // User Routes
