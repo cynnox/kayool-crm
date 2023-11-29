@@ -1359,7 +1359,8 @@ body {
 
 .dashboard {
     height: unset !important;
-    background-color: $body-background;
+    // background-color: $body-background;
+    background-color: green;
 
     .dashboard-content {
         &.print {
