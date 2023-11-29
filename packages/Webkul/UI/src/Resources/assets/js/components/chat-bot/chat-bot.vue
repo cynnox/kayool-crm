@@ -306,19 +306,7 @@ export default {
     name: "ChatBot",
     mounted() {
         console.log("Chat bot mounted...");
-        // fetch("/admin/api/dashboard/user", {
-        //     method: "GET",
-        //     headers: {
-        //         "X-CSRF-TOKEN": document.head.querySelector(
-        //             'meta[name="csrf-token"]'
-        //         ).content,
-        //     },
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log(data);
-        //     })
-        //     .catch((err) => console.error(err));
+        this.retrieveLoginedUserDetails();
 
         // Listen for the keyboard open event
         window.addEventListener('resize', this.adjustDialogHeight.bind(this));
@@ -334,6 +322,7 @@ export default {
             messages: [],
             chatBoxOpened: false,
             chatBoxHeight: `calc(${window.innerHeight}px * 0.80)`,
+            loginedUser:null
         };
     },
     methods: {
@@ -355,12 +344,27 @@ export default {
         onChatBoxCloseBtnClick() {
             this.chatBoxOpen = false;
         },
+        retrieveLoginedUserDetails() {
+            fetch("/admin/account/user", {
+            method: "GET",
+            headers: {
+                "X-CSRF-TOKEN": document.head.querySelector(
+                    'meta[name="csrf-token"]'
+                ).content,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                this.loginedUser = data;
+            })
+            .catch((err) => console.error(err));
+        },
         onSendMessage() {
             if (!this.message) {
                 return;
             }
             let req = {
-                sender: "test_user_8",
+                sender: this.loginedUser ? this.loginedUser?.name :  "test_user_8",
                 message: this.message,
                 metadata: {},
             };
