@@ -47,6 +47,22 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
 
                     Route::post('/cards', 'Webkul\Admin\Http\Controllers\Admin\DashboardController@updateCards')->name('admin.api.dashboard.cards.update');
                 });
+
+                //ChatBot routes
+                 Route::group([
+                    'prefix'=>'chatbot',
+                    'namespace'=> 'Webkul\Admin\Http\Controllers\ChatBot'
+                 ],function(){
+                     Route::post('/send', 'ChatBotController@sendMessage')->name('admin.user.chatbot.sendMessage');
+                });
+
+                // User Routes
+                Route::group([
+                    'prefix'    => 'account',
+                    'namespace' => 'Webkul\Admin\Http\Controllers\User'
+                ], function () {
+                    Route::get('/user', 'AccountController@get')->name('admin.user.account.get');
+                });
             });
 
             // User Routes
@@ -54,7 +70,6 @@ Route::group(['middleware' => ['web', 'admin_locale']], function () {
                 'prefix'    => 'account',
                 'namespace' => 'Webkul\Admin\Http\Controllers\User'
             ], function () {
-                Route::get('/user', 'AccountController@get')->name('admin.user.account.get');
 
                 Route::get('', 'AccountController@edit')->name('admin.user.account.edit');
 
