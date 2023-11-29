@@ -225,7 +225,7 @@
                 </div>
 
                 <div style="flex: 1">
-                    <h2 class="user-name">ChatBot</h2>
+                    <h2 class="user-name">Ask AI</h2>
                     <h5 class="online-status">Online</h5>
                 </div>
                 <div>
@@ -345,7 +345,7 @@ export default {
             this.chatBoxOpen = false;
         },
         retrieveLoginedUserDetails() {
-            fetch("/admin/account/user", {
+            fetch("/admin/api/account/user", {
             method: "GET",
             headers: {
                 "X-CSRF-TOKEN": document.head.querySelector(
@@ -357,7 +357,7 @@ export default {
             .then((data) => {
                 this.loginedUser = data;
             })
-            .catch((err) => console.error(err));
+                .catch((err) => console.error(err));
         },
         onSendMessage() {
             if (!this.message) {
@@ -376,9 +376,12 @@ export default {
                     sender: 1,
                 };
                 this.messages.push(msg);
-                fetch("https://chat.kayool.com/webhooks/rest/webhook", {
+                fetch("/admin/api/chatbot/send", {
                     method: "POST",
                     body: JSON.stringify(req),
+                    headers: {
+                        "X-CSRF-TOKEN": document.head.querySelector('meta[name="csrf-token"]').content,
+                    },
                 })
                     .then((res) => res.json())
                     .then((data) => {
