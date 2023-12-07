@@ -305,14 +305,14 @@
 export default {
     name: "ChatBot",
     mounted() {
-        console.log("Chat bot mounted...");
+        // console.log("Chat bot mounted...");
         this.retrieveLoginedUserDetails();
 
         // Listen for the keyboard open event
         window.addEventListener('resize', this.adjustDialogHeight.bind(this));
     },
     destroyed() {
-        console.log('chatbot destroyed');
+        // console.log('chatbot destroyed');
          window.removeEventListener('resize', this.adjustDialogHeight.bind(this));
     },
     data() {
@@ -339,7 +339,7 @@ export default {
                 }, 500);
             }
 
-            console.log("chat box open");
+            // console.log("chat box open");
         },
         onChatBoxCloseBtnClick() {
             this.chatBoxOpen = false;

@@ -166,10 +166,17 @@ class EmailController extends Controller
             try {
                 Mail::send(new Email($email));
 
+                // $this->emailRepository->update([
+                //     'folders' => ['inbox', 'sent']
+                // ], $email->id);
+
+                // dont add sent mails to inbox
                 $this->emailRepository->update([
-                    'folders' => ['inbox', 'sent']
+                    'folders' => ['sent']
                 ], $email->id);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                info($e);
+            }
         }
 
         Event::dispatch('email.create.after', $email);
@@ -182,7 +189,10 @@ class EmailController extends Controller
 
         session()->flash('success', trans('admin::app.mail.create-success'));
 
-        return redirect()->route('admin.mail.index', ['route'   => 'inbox']);
+        // return redirect()->route('admin.mail.index', ['route'   => 'inbox']);
+        // route to sent page after sending an email
+        return redirect()->route('admin.mail.index', ['route'   => 'sent']);
+
     }
 
     /**
