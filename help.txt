@@ -1,0 +1,8 @@
+create a command file
+php artisan make:command ListAllMessages
+this will create a file ListAllMessages.php under app/Console/Commands
+
+create a command file inside package
+php artisan package:make-command ListAllMessages Webkul/Email
+this will create a file ListAllMessages.php under packages/Webkul/Email/Src/Console/Commands
+

@@ -3,10 +3,9 @@
 namespace Webkul\Email\Repositories;
 
 use Illuminate\Container\Container;
-use Illuminate\Support\Facades\Event;
-use Webkul\Email\Helpers\Parser;
-use Webkul\Email\Helpers\Htmlfilter;
 use Webkul\Core\Eloquent\Repository;
+use Webkul\Email\Helpers\Htmlfilter;
+use Webkul\Email\Helpers\Parser;
 
 class EmailRepository extends Repository
 {
@@ -45,8 +44,7 @@ class EmailRepository extends Repository
         Parser $emailParser,
         Htmlfilter $htmlFilter,
         Container $container
-    )
-    {
+    ) {
         $this->attachmentRepository = $attachmentRepository;
 
         $this->emailParser = $emailParser;
@@ -61,7 +59,7 @@ class EmailRepository extends Repository
      *
      * @return mixed
      */
-    function model()
+    public function model()
     {
         return 'Webkul\Email\Contracts\Email';
     }
@@ -111,25 +109,25 @@ class EmailRepository extends Repository
             return;
         }
 
-        if (! $fromNameParts = mailparse_rfc822_parse_addresses($this->emailParser->getHeader('from'))) {
+        if (!$fromNameParts = mailparse_rfc822_parse_addresses($this->emailParser->getHeader('from'))) {
             $fromNameParts = mailparse_rfc822_parse_addresses($this->emailParser->getHeader('sender'));
         }
 
         $headers = [
-            'from'          => current($this->parseEmailAddress('from')),
-            'sender'        => $this->parseEmailAddress('sender'),
-            'reply_to'      => $this->parseEmailAddress('to'),
-            'cc'            => $this->parseEmailAddress('cc'),
-            'bcc'           => $this->parseEmailAddress('bcc'),
-            'subject'       => $this->emailParser->getHeader('subject'),
-            'source'        => 'email',
-            'name'          => $fromNameParts[0]['display'] == $fromNameParts[0]['address']
-                               ? current(explode('@', $fromNameParts[0]['display']))
-                               : $fromNameParts[0]['display'],
-            'user_type'     => 'person',
-            'message_id'    => $this->emailParser->getHeader('message-id') ?? time() . '@' . config('mail.domain'),
+            'from' => current($this->parseEmailAddress('from')),
+            'sender' => $this->parseEmailAddress('sender'),
+            'reply_to' => $this->parseEmailAddress('to'),
+            'cc' => $this->parseEmailAddress('cc'),
+            'bcc' => $this->parseEmailAddress('bcc'),
+            'subject' => $this->emailParser->getHeader('subject'),
+            'source' => 'email',
+            'name' => $fromNameParts[0]['display'] == $fromNameParts[0]['address']
+            ? current(explode('@', $fromNameParts[0]['display']))
+            : $fromNameParts[0]['display'],
+            'user_type' => 'person',
+            'message_id' => $this->emailParser->getHeader('message-id') ?? time() . '@' . config('mail.domain'),
             'reference_ids' => htmlspecialchars_decode($this->emailParser->getHeader('references')),
-            'in_reply_to'   => htmlspecialchars_decode($this->emailParser->getHeader('in-reply-to')),
+            'in_reply_to' => htmlspecialchars_decode($this->emailParser->getHeader('in-reply-to')),
         ];
 
         foreach ($headers['reply_to'] as $to) {
@@ -138,15 +136,15 @@ class EmailRepository extends Repository
             }
         }
 
-        if (! isset($email) && $headers['in_reply_to']) {
+        if (!isset($email) && $headers['in_reply_to']) {
             $email = $this->findOneWhere(['message_id' => $headers['in_reply_to']]);
 
-            if (! $email) {
-                $email = $this->findOneWhere([['reference_ids', 'like',  '%' . $headers['in_reply_to'] . '%']]);
+            if (!$email) {
+                $email = $this->findOneWhere([['reference_ids', 'like', '%' . $headers['in_reply_to'] . '%']]);
             }
         }
-        
-        if (! isset($email) && $headers['reference_ids']) {
+
+        if (!isset($email) && $headers['reference_ids']) {
             $referenceIds = explode(' ', $headers['reference_ids']);
 
             foreach ($referenceIds as $referenceId) {
@@ -156,17 +154,17 @@ class EmailRepository extends Repository
             }
         }
 
-        if (! $reply = $this->emailParser->getMessageBody('text')) {
+        if (!$reply = $this->emailParser->getMessageBody('text')) {
             $reply = $this->emailParser->getTextMessageBody();
         }
 
-        if (! isset($email)) {
+        if (!isset($email)) {
             $email = $this->create(array_merge($headers, [
-                'folders'       => ['inbox'],
-                'reply'         => $reply, //$this->htmlFilter->HTMLFilter($reply, ''),
-                'unique_id'     => time() . '@' . config('mail.domain'),
+                'folders' => ['inbox'],
+                'reply' => $reply, //$this->htmlFilter->HTMLFilter($reply, ''),
+                'unique_id' => time() . '@' . config('mail.domain'),
                 'reference_ids' => [$headers['message_id']],
-                'user_type'     => 'person',
+                'user_type' => 'person',
             ]));
         } else {
             $this->update([
@@ -174,9 +172,9 @@ class EmailRepository extends Repository
             ], $email->id);
 
             $this->create(array_merge($headers, [
-                'reply'         => $this->htmlFilter->HTMLFilter($reply, ''),
-                'parent_id'     => $email->id,
-                'user_type'     => 'person',
+                'reply' => $this->htmlFilter->HTMLFilter($reply, ''),
+                'parent_id' => $email->id,
+                'user_type' => 'person',
             ]));
         }
     }
@@ -223,5 +221,14 @@ class EmailRepository extends Repository
         }
 
         return $data;
+    }
+
+    /**
+     *
+     */
+    public function findMailByMessageID($messageID)
+    {
+        $email = $this->findOneWhere(['message_id' => $messageID]);
+        return $email;
     }
 }

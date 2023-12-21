@@ -25,6 +25,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        info("sheduler executed");
+        // $schedule->command('app:list_all_emails')->everyMinute();
+
+        // $schedule->call(function () {
+        //     info("scheduled");
+        // })->everyMinute();
+
     }
 
     /**
@@ -34,8 +41,9 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
-        $this->load(__DIR__.'/../../packages/Webkul/Core/src/Console/Commands');
+        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__ . '/../../packages/Webkul/Core/src/Console/Commands');
+        $this->load(__DIR__ . '/../../packages/Webkul/Email/src/Console/Commands');
 
         require base_path('routes/console.php');
     }
