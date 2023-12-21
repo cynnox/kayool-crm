@@ -143,8 +143,8 @@ class EmailController extends Controller
         ]);
 
         Event::dispatch('email.create.before');
-        info("Store email method");
-        info(request()->all());
+        // info("Store email method");
+        // info(request()->all());
 
         $uniqueId = time() . '@' . config('mail.domain');
 
