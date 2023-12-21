@@ -5,6 +5,7 @@ namespace Webkul\Email\Console\Commands;
 use Illuminate\Console\Command;
 use Webklex\IMAP\Facades\Client;
 use Webkul\Email\Helpers\ProcessInboxMail;
+use Webkul\Email\Repositories\EmailInboxTrackJobRepository;
 use Webkul\Email\Repositories\EmailRepository;
 
 class ListAllMessages extends Command
@@ -31,10 +32,18 @@ class ListAllMessages extends Command
      */
     protected $emailRepository;
 
-    public function __construct(EmailRepository $emailRepository)
-    {
+    /**
+     * EmailInboxTrackJobRepository object
+     *
+     * @var \Webkul\Email\Repositories\EmailInboxTrackJobRepository
+     */
+    protected $emailInboxTrackJobRepository;
+
+    public function __construct(EmailRepository $emailRepository,
+        EmailInboxTrackJobRepository $emailInboxTrackJobRepository) {
         parent::__construct();
         $this->emailRepository = $emailRepository;
+        $this->emailInboxTrackJobRepository = $emailInboxTrackJobRepository;
     }
 
     /**
@@ -44,27 +53,40 @@ class ListAllMessages extends Command
      */
     public function handle()
     {
-        info("checking for new emails");
         // date format 01.01.2024, 31.12.2024
         $currentDate = date('d.m.Y');
-        $this->info($currentDate);
+        $lastCheckedDetails = $this->emailInboxTrackJobRepository->findLastOne();
+        if ($lastCheckedDetails == null) {
+            // this will execute only once
+            $lastCheckedDate = $currentDate;
+        } else {
+            $lastCheckedDate = $lastCheckedDetails->last_checked_date;
+        }
+        info("checking for new emails " . $currentDate . " last checked on " . $lastCheckedDate);
+
         $client = Client::account("default");
         $client->connect();
 
         // get INBOX folder
         $folder = $client->getFolderByName('INBOX');
-        $lastCheckedDate = '21.12.2023';
         $count = $folder->query()->since($lastCheckedDate)->all()->count();
-        info("Total messages: " . $count);
-        $pageSize = 20;
+        info("Total messages in INBOX: " . $count);
+        $pageSize = 50;
         $loopLimit = (int) ($count / $pageSize);
         if ($count % $pageSize != 0) {
             $loopLimit += 1;
         }
-        // info("loop limit: " . $loopLimit);
+        info("Total pages: " . $loopLimit);
         for ($pageIndex = 1; $pageIndex <= $loopLimit; $pageIndex++) {
             $this->getMessagesByPagination($folder, $lastCheckedDate, $pageSize, $pageIndex);
         }
+
+        if ($lastCheckedDetails == null) {
+            $this->emailInboxTrackJobRepository->create(['last_checked_date' => $currentDate]);
+        } else {
+            $this->emailInboxTrackJobRepository->update(['last_checked_date' => $currentDate], $lastCheckedDetails->id);
+        }
+        info("Process completed..");
 
         return Command::SUCCESS;
     }

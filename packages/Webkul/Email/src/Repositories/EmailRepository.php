@@ -231,4 +231,11 @@ class EmailRepository extends Repository
         $email = $this->findOneWhere(['message_id' => $messageID]);
         return $email;
     }
+
+    public function findByID($messageID)
+    {
+        $email = $this->where('id', $messageID)->first();
+        return $email;
+
+    }
 }

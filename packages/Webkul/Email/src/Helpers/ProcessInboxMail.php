@@ -31,83 +31,83 @@ class ProcessInboxMail
     {
         info("From: " . $this->message->getFrom() . "\tTo: " . $this->message->getTo() . "\tSubject: " . $this->message->getSubject());
 
-        if (strpos($this->message->getFrom(), "contact@kayool.com") !== false || strpos($this->message->getFrom(), "arungirivasan@gmail.com") !== false) {
-            $header = $this->message->getHeader();
-            $headerAttributes = $header->getAttributes();
+        // if (strpos($this->message->getFrom(), "contact@kayool.com") !== false || strpos($this->message->getFrom(), "arungirivasan@gmail.com") !== false) {
+        $header = $this->message->getHeader();
+        $headerAttributes = $header->getAttributes();
 
-            if (!empty($headerAttributes['in_reply_to'])) {
-                $attachmentsExist = $this->message->hasAttachments();
-                if ($attachmentsExist) {
-                    $attachments = $this->message->getAttachments();
-                }
-                if ($this->message->hasHTMLBody()) {
-                    // info("\tMessage HTML: " . $this->message->getHTMLBody());
-                    $mailBody = $this->message->getHTMLBody();
-                } else if ($this->message->hasTextBody()) {
-                    // info("\tMessage Text: " . $this->message->getTextBody());
-                    $mailBody = $this->message->getTextBody();
-                }
-
-                $messageID = strval($this->message->message_id);
-
-                // foreach ($headerAttributes as $key => $value) {
-                //     info("\t" . $key . "\t" . $value);
-                // }
-
-                // get parent mailID from DB
-                $repliedEmail = $this->emailRepository->findMailByMessageID($headerAttributes['in_reply_to']);
-                if ($headerAttributes['in_reply_to'] != null && $repliedEmail == null) {
-                    info("Skipping message couldn't find reply message from db - " . $headerAttributes['in_reply_to']);
-                    return;
-                }
-                // info("replied mail - " . $repliedEmail);
-                if ($repliedEmail != null) {
-                    $parentID = $this->getParentID($repliedEmail);
-                    $folders = $repliedEmail->folders;
-                } else {
-                    $folders = ['inbox'];
-                }
-                // if repliedEmail is not exist in inbox then add it to inbox
-                if (!in_array('inbox', $folders)) {
-                    // add inbox to folders
-                    $folders[] = 'inbox';
-                    $this->emailRepository->update([
-                        'folders' => $folders,
-                    ], $parentID);
-                }
-
-                $emailReq = [
-                    'subject' => strval($this->message->getSubject()),
-                    'source' => 'email',
-                    'user_type' => 'person',
-                    'name' => $this->parseNameFromEmailAddress(strval($this->message->getFrom())),
-                    'reply' => $mailBody,
-                    'folders' => $folders,
-                    'from' => $this->parseEmailAddress(strval($this->message->getFrom())),
-                    'reply_to' => $this->getEmailAddressArray($this->message->getTo()),
-                    'cc' => $this->getEmailAddressArray($headerAttributes['in_reply_to']),
-                    'unique_id' => $messageID,
-                    'message_id' => $messageID,
-                    'reference_ids' => $this->getReferencesFromHeader($headerAttributes, $messageID),
-                    'parent_id' => $parentID,
-                    'attachments' => [],
-                ];
-                if (!empty($repliedEmail->lead_id)) {
-                    $emailReq = array_merge($emailReq, ['lead_id' => $repliedEmail->lead_id]);
-                }
-
-                $email = $this->emailRepository->findMailByMessageID($messageID);
-                if ($email == null) {
-                    info("create new email object in DB");
-                    // info("req: " . json_encode($emailReq));
-                    $email = $this->emailRepository->create($emailReq);
-                    info("created - \n" . $email);
-                } else {
-                    info("Email already exist. Dont update DB");
-                }
+        if (!empty($headerAttributes['in_reply_to'])) {
+            $attachmentsExist = $this->message->hasAttachments();
+            if ($attachmentsExist) {
+                $attachments = $this->message->getAttachments();
+            }
+            if ($this->message->hasHTMLBody()) {
+                // info("\tMessage HTML: " . $this->message->getHTMLBody());
+                $mailBody = $this->message->getHTMLBody();
+            } else if ($this->message->hasTextBody()) {
+                // info("\tMessage Text: " . $this->message->getTextBody());
+                $mailBody = $this->message->getTextBody();
             }
 
+            $messageID = strval($this->message->message_id);
+
+            // foreach ($headerAttributes as $key => $value) {
+            //     info("\t" . $key . "\t" . $value);
+            // }
+
+            // get parent mailID from DB
+            $repliedEmail = $this->emailRepository->findMailByMessageID($headerAttributes['in_reply_to']);
+            if ($headerAttributes['in_reply_to'] != null && $repliedEmail == null) {
+                info("Skipping message couldn't find reply message from db - " . $headerAttributes['in_reply_to']);
+                return;
+            }
+            // info("replied mail - " . $repliedEmail);
+            if ($repliedEmail != null) {
+                $parentID = $this->getParentID($repliedEmail);
+                $folders = $repliedEmail->folders;
+            } else {
+                $folders = ['inbox'];
+            }
+            // if repliedEmail is not exist in inbox then add it to inbox
+            if (!in_array('inbox', $folders)) {
+                // add inbox to folders
+                $folders[] = 'inbox';
+                $this->emailRepository->update([
+                    'folders' => $folders,
+                ], $parentID);
+            }
+
+            $emailReq = [
+                'subject' => strval($this->message->getSubject()),
+                'source' => 'email',
+                'user_type' => 'person',
+                'name' => $this->parseNameFromEmailAddress(strval($this->message->getFrom())),
+                'reply' => $mailBody,
+                'folders' => $folders,
+                'from' => $this->parseEmailAddress(strval($this->message->getFrom())),
+                'reply_to' => $this->getEmailAddressArray($this->message->getTo()),
+                'cc' => $this->getEmailAddressArray($headerAttributes['in_reply_to']),
+                'unique_id' => $messageID,
+                'message_id' => $messageID,
+                'reference_ids' => $this->getReferencesFromHeader($headerAttributes, $messageID),
+                'parent_id' => $parentID,
+                'attachments' => [],
+            ];
+            if (!empty($repliedEmail->lead_id)) {
+                $emailReq = array_merge($emailReq, ['lead_id' => $repliedEmail->lead_id]);
+            }
+
+            $email = $this->emailRepository->findMailByMessageID($messageID);
+            if ($email == null) {
+                info("Email not exist. Save new email to DB");
+                // info("req: " . json_encode($emailReq));
+                $email = $this->emailRepository->create($emailReq);
+                info("Saved - \n" . $email);
+            } else {
+                info("Email already exist in DB.");
+            }
         }
+
+        // }
         info("------------");
     }
 
@@ -197,7 +197,7 @@ class ProcessInboxMail
     {
         $parentID = $mail->id;
         if ($mail->parent_id != null) {
-            $parentMail = $this->emailRepository->findOrFail($mail->parent_id);
+            $parentMail = $this->emailRepository->findByID($mail->parent_id);
             if ($parentMail != null) {
                 return $this->getParentID($parentMail);
             } else {
