@@ -6,3 +6,18 @@ create a command file inside package
 php artisan package:make-command ListAllMessages Webkul/Email
 this will create a file ListAllMessages.php under packages/Webkul/Email/Src/Console/Commands
 
+
+
+update project in server
+
+1. git pull origin master
+2. npm run prod:all
+3. rm -rf public/vendor
+4. php artisan vendor:publish --all --force
+5. php artisan config:clear
+6. php artisan route:clear
+7. php artisan view:clear
+8. php artisan cache:clear
+9. php artisan migrate -> if there is any new table
+10. sudo service apache2 restart
+11. sudo service nginx restart
