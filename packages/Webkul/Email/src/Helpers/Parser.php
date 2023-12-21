@@ -99,7 +99,7 @@ class Parser
         // streams have to be cached to file first
         $meta = @stream_get_meta_data($stream);
 
-        if (! $meta || !$meta['mode'] || $meta['mode'][0] != 'r' || $meta['eof']) {
+        if (!$meta || !$meta['mode'] || $meta['mode'][0] != 'r' || $meta['eof']) {
             throw new \Exception(
                 'setStream() expects parameter stream to be readable stream resource.'
             );
@@ -108,13 +108,13 @@ class Parser
         $tmp_fp = tmpfile();
 
         if ($tmp_fp) {
-            while (! feof($stream)) {
+            while (!feof($stream)) {
                 fwrite($tmp_fp, fread($stream, 2028));
             }
 
             fseek($tmp_fp, 0);
 
-            $this->stream =& $tmp_fp;
+            $this->stream = &$tmp_fp;
         } else {
             throw new \Exception(
                 'Could not create temporary files for attachments. Your tmp directory may be unwritable by PHP.'
@@ -126,7 +126,7 @@ class Parser
         $this->resource = mailparse_msg_create();
 
         // parses the message incrementally (low memory usage but slower)
-        while (! feof($this->stream)) {
+        while (!feof($this->stream)) {
             mailparse_msg_parse($this->resource, fread($this->stream, 2082));
         }
 
@@ -163,13 +163,13 @@ class Parser
     {
         $structure = mailparse_msg_get_structure($this->resource);
 
-        $headerType = (stripos($this->data,'Content-Language:') !== false) ? 'Content-Language:' : 'Content-Type:';
+        $headerType = (stripos($this->data, 'Content-Language:') !== false) ? 'Content-Language:' : 'Content-Type:';
 
         if (count($structure) == 1) {
-            $tempParts = explode(PHP_EOL,$this->data);
+            $tempParts = explode(PHP_EOL, $this->data);
 
             foreach ($tempParts as $key => $part) {
-                if (stripos($part,$headerType) !== false) {
+                if (stripos($part, $headerType) !== false) {
                     break;
                 }
 
@@ -178,7 +178,7 @@ class Parser
                 }
             }
 
-            $data = implode(PHP_EOL,$tempParts);
+            $data = implode(PHP_EOL, $tempParts);
 
             $this->resource = \mailparse_msg_create();
 
@@ -278,7 +278,7 @@ class Parser
 
         list($relations, $content_types, $boundaries) = $matches;
 
-        $messageToProcess = substr($source, stripos($source, (string)$content_delimeter) + strlen($content_delimeter));
+        $messageToProcess = substr($source, stripos($source, (string) $content_delimeter) + strlen($content_delimeter));
 
         array_unshift($boundaries, $boundary);
 
@@ -330,9 +330,9 @@ class Parser
         $textBody = $htmlBody = $body = false;
 
         $mime_types = [
-            'text'=> 'text/plain',
-            'text'=> 'text/plain; (error)',
-            'html'=> 'text/html',
+            'text' => 'text/plain',
+            'text' => 'text/plain; (error)',
+            'html' => 'text/html',
         ];
 
         if (in_array($type, array_keys($mime_types))) {
@@ -350,7 +350,7 @@ class Parser
                         $part_from_sender = is_array($part['headers']['from']) ? $part['headers']['from'][0] : $part['headers']['from'];
                         $mail_part_addresses = mailparse_rfc822_parse_addresses($part_from_sender);
 
-                        if (! empty($mail_part_addresses[0]['address'])
+                        if (!empty($mail_part_addresses[0]['address'])
                             && false !== strrpos($mail_part_addresses[0]['address'], 'pcsms.com')
                         ) {
                             $last_header = end($headers);
@@ -377,7 +377,7 @@ class Parser
             if (is_array($this->files)) {
                 foreach ($this->files as $file) {
                     if ($file['contentId']) {
-                        $body = str_replace("cid:".preg_replace('/[<>]/','',$file['contentId']) , $file['path'], $body);
+                        $body = str_replace("cid:" . preg_replace('/[<>]/', '', $file['contentId']), $file['path'], $body);
                         $path = $file['path'];
                     }
                 }
@@ -405,7 +405,7 @@ class Parser
                     $part_from_sender = is_array($part['headers']['from']) ? $part['headers']['from'][0] : $part['headers']['from'];
                     $mail_part_addresses = mailparse_rfc822_parse_addresses($part_from_sender);
 
-                    if (! empty($mail_part_addresses[0]['address'])
+                    if (!empty($mail_part_addresses[0]['address'])
                         && false !== strrpos($mail_part_addresses[0]['address'], 'pcsms.com')
                     ) {
                         $last_header = end($headers);
@@ -439,8 +439,8 @@ class Parser
         foreach ($this->parts as $part) {
             if ($this->getPart('content-id', $part) == $contentId) {
                 $embeddedData .= $this->getPart('content-type', $part);
-                $embeddedData .= ';'.$this->getPart('transfer-encoding', $part);
-                $embeddedData .= ','.$this->getPartBody($part);
+                $embeddedData .= ';' . $this->getPart('transfer-encoding', $part);
+                $embeddedData .= ',' . $this->getPartBody($part);
             }
         }
 
@@ -458,116 +458,121 @@ class Parser
         $non_attachment_types = ['text/plain', 'text/html', 'text/plain; (error)'];
         $nonameIter = 0;
 
-        foreach ($this->parts as $part) {
-            $disposition = $this->getPart('content-disposition', $part);
-            $filename = 'noname';
+        if ($this->parts != null) {
+            foreach ($this->parts as $part) {
+                $disposition = $this->getPart('content-disposition', $part);
+                $filename = 'noname';
 
-            if (isset($part['disposition-filename'])) {
-                $filename = $this->decodeHeader($part['disposition-filename']);
-            } elseif (isset($part['content-name'])) {
-                // if we have no disposition but we have a content-name, it's a valid attachment.
-                // we simulate the presence of an attachment disposition with a disposition filename
-                $filename = $this->decodeHeader($part['content-name']);
-                $disposition = 'attachment';
-            } elseif (! in_array($part['content-type'], $non_attachment_types, true)
-                && substr($part['content-type'], 0, 10) !== 'multipart/'
-            ) {
-                // if we cannot get it by getMessageBody(), we assume it is an attachment
-                $disposition = 'attachment';
-            }
-
-            if (in_array($disposition, $dispositions) === true && isset($filename) === true) {
-                if ($filename == 'noname') {
-                    $nonameIter++;
-                    $filename = 'noname' . $nonameIter;
-                }
-
-                $headersAttachments = $this->getPart('headers', $part);
-                $contentidAttachments = $this->getPart('content-id', $part);
-
-                if (! $contentidAttachments
-                    && $disposition == "inline"
-                    && ! strpos($this->getPart('content-type', $part), 'image/')
-                    && ! stripos($filename,"noname") == false
+                if (isset($part['disposition-filename'])) {
+                    $filename = $this->decodeHeader($part['disposition-filename']);
+                } elseif (isset($part['content-name'])) {
+                    // if we have no disposition but we have a content-name, it's a valid attachment.
+                    // we simulate the presence of an attachment disposition with a disposition filename
+                    $filename = $this->decodeHeader($part['content-name']);
+                    $disposition = 'attachment';
+                } elseif (!in_array($part['content-type'], $non_attachment_types, true)
+                    && substr($part['content-type'], 0, 10) !== 'multipart/'
                 ) {
-                    //skip
-                } else {
-                    $attachments[] = new Attachment(
-                        $filename,
-                        $this->getPart('content-type', $part),
-                        $this->getAttachmentStream($part),
-                        $disposition,
-                        $contentidAttachments,
-                        $headersAttachments
-                    );
+                    // if we cannot get it by getMessageBody(), we assume it is an attachment
+                    $disposition = 'attachment';
+                }
+
+                if (in_array($disposition, $dispositions) === true && isset($filename) === true) {
+                    if ($filename == 'noname') {
+                        $nonameIter++;
+                        $filename = 'noname' . $nonameIter;
+                    }
+
+                    $headersAttachments = $this->getPart('headers', $part);
+                    $contentidAttachments = $this->getPart('content-id', $part);
+
+                    if (!$contentidAttachments
+                        && $disposition == "inline"
+                        && !strpos($this->getPart('content-type', $part), 'image/')
+                        && !stripos($filename, "noname") == false
+                    ) {
+                        //skip
+                    } else {
+                        $attachments[] = new Attachment(
+                            $filename,
+                            $this->getPart('content-type', $part),
+                            $this->getAttachmentStream($part),
+                            $disposition,
+                            $contentidAttachments,
+                            $headersAttachments
+                        );
+                    }
                 }
             }
+
         }
 
-        return ! empty($attachments) ? $attachments : $this->extractMultipartMIMEAttachments();
+        return !empty($attachments) ? $attachments : $this->extractMultipartMIMEAttachments();
     }
 
     public function extractMultipartMIMEAttachments()
     {
         $attachmentCollection = $processedAttachmentCollection = [];
+        if ($this->parts != null) {
 
-        foreach ($this->parts as $part) {
-            $boundary = isset($part['content-boundary']) ? trim($part['content-boundary']) : '';
-            $boundary = substr($boundary, strpos($boundary, '----=') + strlen('----='));
+            foreach ($this->parts as $part) {
+                $boundary = isset($part['content-boundary']) ? trim($part['content-boundary']) : '';
+                $boundary = substr($boundary, strpos($boundary, '----=') + strlen('----='));
 
-            preg_match_all('/------=(3D_.*)\sContent-Type:\s(.*)\s*boundary=3D"----=(3D_.*)"/', $this->data, $matches);
+                preg_match_all('/------=(3D_.*)\sContent-Type:\s(.*)\s*boundary=3D"----=(3D_.*)"/', $this->data, $matches);
 
-            $delimeter = array_shift($matches);
-            $content_delimeter = end($delimeter);
+                $delimeter = array_shift($matches);
+                $content_delimeter = end($delimeter);
 
-            list($relations, $content_types, $boundaries) = $matches;
-            $messageToProcess = substr($this->data, stripos($this->data, (string)$content_delimeter) + strlen($content_delimeter));
+                list($relations, $content_types, $boundaries) = $matches;
+                $messageToProcess = substr($this->data, stripos($this->data, (string) $content_delimeter) + strlen($content_delimeter));
 
-            array_unshift($boundaries, $boundary);
+                array_unshift($boundaries, $boundary);
 
-            // Extract the text
-            foreach (array_reverse($boundaries) as $index => $boundary) {
-                $processedEmailSegments = [];
-                $emailSegments = explode('------=' . $boundary, $messageToProcess);
+                // Extract the text
+                foreach (array_reverse($boundaries) as $index => $boundary) {
+                    $processedEmailSegments = [];
+                    $emailSegments = explode('------=' . $boundary, $messageToProcess);
 
-                // Remove empty parts
-                foreach ($emailSegments as $emailSegment) {
-                    if (! empty(trim($emailSegment))) {
-                        $processedEmailSegments[] = trim($emailSegment);
+                    // Remove empty parts
+                    foreach ($emailSegments as $emailSegment) {
+                        if (!empty(trim($emailSegment))) {
+                            $processedEmailSegments[] = trim($emailSegment);
+                        }
                     }
-                }
 
-                // Remove unrelated parts
-                array_pop($processedEmailSegments);
+                    // Remove unrelated parts
+                    array_pop($processedEmailSegments);
 
-                for ($i = 0; $i < $index; $i++) {
-                    if (count($processedEmailSegments) > 1) {
-                        array_shift($processedEmailSegments);
+                    for ($i = 0; $i < $index; $i++) {
+                        if (count($processedEmailSegments) > 1) {
+                            array_shift($processedEmailSegments);
+                        }
                     }
-                }
 
-                // Parse each parts for text|html content
-                foreach ($processedEmailSegments as $emailSegment) {
-                    $emailSegment = quoted_printable_decode(quoted_printable_decode($emailSegment));
+                    // Parse each parts for text|html content
+                    foreach ($processedEmailSegments as $emailSegment) {
+                        $emailSegment = quoted_printable_decode(quoted_printable_decode($emailSegment));
 
-                    if (stripos($emailSegment, 'content-type: text/plain;') === false
-                        && stripos($emailSegment, 'content-type: text/html;') === false
-                    ) {
-                        $attachmentParts = explode("\n\n", $emailSegment);
+                        if (stripos($emailSegment, 'content-type: text/plain;') === false
+                            && stripos($emailSegment, 'content-type: text/html;') === false
+                        ) {
+                            $attachmentParts = explode("\n\n", $emailSegment);
 
-                        if (! empty($attachmentParts) && count($attachmentParts) == 2) {
-                            $attachmentDetails = explode("\n", $attachmentParts[0]);
+                            if (!empty($attachmentParts) && count($attachmentParts) == 2) {
+                                $attachmentDetails = explode("\n", $attachmentParts[0]);
 
-                            $attachmentDetails = array_map(function($item) {
-                                return trim($item);
-                            }, $attachmentDetails);
+                                $attachmentDetails = array_map(function ($item) {
+                                    return trim($item);
+                                }, $attachmentDetails);
 
-                            $attachmentData = trim($attachmentParts[1]);
+                                $attachmentData = trim($attachmentParts[1]);
 
-                            $attachmentCollection[] = [
-                                'details' => $attachmentDetails,
-                                'data' => $attachmentData
-                            ];
+                                $attachmentCollection[] = [
+                                    'details' => $attachmentDetails,
+                                    'data' => $attachmentData,
+                                ];
+                            }
                         }
                     }
                 }
@@ -634,17 +639,17 @@ class Parser
 
         $headers = $this->getPart('headers', $part);
         $encodingType = array_key_exists('content-transfer-encoding', $headers)
-            ? $headers['content-transfer-encoding']
-            : '';
+        ? $headers['content-transfer-encoding']
+        : '';
 
         if ($temp_fp) {
             if ($this->stream) {
                 $start = $part['starting-pos-body'];
                 $end = $part['ending-pos-body'];
-                
+
                 fseek($this->stream, $start, SEEK_SET);
 
-                $len = $end-$start;
+                $len = $end - $start;
                 $written = 0;
 
                 while ($written < $len) {
@@ -667,7 +672,7 @@ class Parser
                 'Could not create temporary files for attachments. Your tmp directory may be unwritable by PHP.'
             );
         }
-        
+
         return $temp_fp;
     }
 
@@ -691,10 +696,10 @@ class Parser
     }
 
     /**
-    * $input can be a string or array
-    * @param string|array $input
-    * @return string
-    */
+     * $input can be a string or array
+     * @param string|array $input
+     * @return string
+     */
     private function decodeHeader($input)
     {
         //Sometimes we have 2 label From so we take only the first
@@ -721,7 +726,6 @@ class Parser
             $charset = $matches[2];
             $encoding = $matches[3];
             $text = $matches[4];
-
 
             switch (strtolower($encoding)) {
                 case 'b':
@@ -814,7 +818,7 @@ class Parser
     {
         $start = $part['starting-pos-body'];
         $end = $part['ending-pos-body'];
-        
+
         return substr($this->data, $start, $end - $start);
     }
 }

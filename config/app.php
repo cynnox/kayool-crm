@@ -238,6 +238,9 @@ return [
         Webkul\User\Providers\UserServiceProvider::class,
         Webkul\WebForm\Providers\WebFormServiceProvider::class,
         Webkul\Workflow\Providers\WorkflowServiceProvider::class,
+
+        // imap
+        Webklex\IMAP\Providers\LaravelServiceProvider::class,
     ],
 
     /*
@@ -291,6 +294,9 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
         'Menu'         => Webkul\Admin\Facades\Menu::class,
+        // imap
+        'Client'       => Webklex\IMAP\Facades\Client::class,
+
     ],
 
 ];

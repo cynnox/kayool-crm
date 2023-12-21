@@ -3,13 +3,13 @@
 namespace Webkul\Admin\Http\Controllers\Mail;
 
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
-use Webkul\Email\Mails\Email;
+use Illuminate\Support\Facades\Storage;
 use Webkul\Admin\Http\Controllers\Controller;
-use Webkul\Lead\Repositories\LeadRepository;
-use Webkul\Email\Repositories\EmailRepository;
+use Webkul\Email\Mails\Email;
 use Webkul\Email\Repositories\AttachmentRepository;
+use Webkul\Email\Repositories\EmailRepository;
+use Webkul\Lead\Repositories\LeadRepository;
 
 class EmailController extends Controller
 {
@@ -47,8 +47,7 @@ class EmailController extends Controller
         LeadRepository $leadRepository,
         EmailRepository $emailRepository,
         AttachmentRepository $attachmentRepository
-    )
-    {
+    ) {
         $this->leadRepository = $leadRepository;
 
         $this->emailRepository = $emailRepository;
@@ -63,11 +62,11 @@ class EmailController extends Controller
      */
     public function index()
     {
-        if (! request('route')) {
+        if (!request('route')) {
             return redirect()->route('admin.mail.index', ['route' => 'inbox']);
         }
 
-        if (! bouncer()->hasPermission('mail.' . request('route'))) {
+        if (!bouncer()->hasPermission('mail.' . request('route'))) {
             abort(401, 'This action is unauthorized');
         }
 
@@ -96,8 +95,8 @@ class EmailController extends Controller
             ->findOrFail(request('id'));
 
         $currentUser = auth()->guard('user')->user();
-        
-        if ($currentUser->view_permission == 'individual') {            
+
+        if ($currentUser->view_permission == 'individual') {
             $results = $this->leadRepository->findWhere([
                 ['id', '=', $email->lead_id],
                 ['user_id', '=', $currentUser->id],
@@ -114,16 +113,21 @@ class EmailController extends Controller
                 ['id', '=', $email->lead_id],
             ]);
         }
-           
+
         if (empty($results->toArray())) {
             unset($email->lead_id);
         }
-        
+
         if (request('route') == 'draft') {
             return view('admin::mail.compose', compact('email'));
         } else {
             return view('admin::mail.view', compact('email'));
         }
+    }
+
+    public function store_reply_mails()
+    {
+        info("store_reply_mails() called");
     }
 
     /**
@@ -135,10 +139,12 @@ class EmailController extends Controller
     {
         $this->validate(request(), [
             'reply_to' => 'required|array|min:1',
-            'reply'    => 'required',
+            'reply' => 'required',
         ]);
 
         Event::dispatch('email.create.before');
+        info("Store email method");
+        info(request()->all());
 
         $uniqueId = time() . '@' . config('mail.domain');
 
@@ -151,18 +157,18 @@ class EmailController extends Controller
         }
 
         $email = $this->emailRepository->create(array_merge(request()->all(), [
-            'source'        => 'web',
-            'from'          => config('mail.from.address'),
-            'user_type'     => 'admin',
-            'folders'       => request('is_draft') ? ['draft'] : ['outbox'],
-            'name'          => auth()->guard('user')->user()->name,
-            'unique_id'     => $uniqueId,
-            'message_id'    => $uniqueId,
+            'source' => 'web',
+            'from' => config('mail.from.address'),
+            'user_type' => 'admin',
+            'folders' => request('is_draft') ? ['draft'] : ['outbox'],
+            'name' => auth()->guard('user')->user()->name,
+            'unique_id' => $uniqueId,
+            'message_id' => $uniqueId,
             'reference_ids' => array_merge($referenceIds, [$uniqueId]),
-            'user_id'       => auth()->guard('user')->user()->id,
+            'user_id' => auth()->guard('user')->user()->id,
         ]));
 
-        if (! request('is_draft')) {
+        if (!request('is_draft')) {
             try {
                 Mail::send(new Email($email));
 
@@ -172,7 +178,7 @@ class EmailController extends Controller
 
                 // dont add sent mails to inbox
                 $this->emailRepository->update([
-                    'folders' => ['sent']
+                    'folders' => ['sent'],
                 ], $email->id);
             } catch (\Exception $e) {
                 info($e);
@@ -191,7 +197,7 @@ class EmailController extends Controller
 
         // return redirect()->route('admin.mail.index', ['route'   => 'inbox']);
         // route to sent page after sending an email
-        return redirect()->route('admin.mail.index', ['route'   => 'sent']);
+        return redirect()->route('admin.mail.index', ['route' => 'sent']);
 
     }
 
@@ -207,7 +213,7 @@ class EmailController extends Controller
 
         $data = request()->all();
 
-        if (! is_null(request('is_draft'))) {
+        if (!is_null(request('is_draft'))) {
             $data['folders'] = request('is_draft') ? ['draft'] : ['outbox'];
         }
 
@@ -215,17 +221,17 @@ class EmailController extends Controller
 
         Event::dispatch('email.update.after', $email);
 
-        if (! is_null(request('is_draft')) && ! request('is_draft')) {
+        if (!is_null(request('is_draft')) && !request('is_draft')) {
             try {
                 Mail::send(new Email($email));
 
                 $this->emailRepository->update([
-                    'folders' => ['inbox', 'sent']
+                    'folders' => ['inbox', 'sent'],
                 ], $email->id);
             } catch (\Exception $e) {}
         }
 
-        if (! is_null(request('is_draft'))) {
+        if (!is_null(request('is_draft'))) {
             if (request('is_draft')) {
                 session()->flash('success', trans('admin::app.mail.saved-to-draft'));
 
@@ -247,7 +253,7 @@ class EmailController extends Controller
                     'customAttributes' => app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
                         'entity_type' => 'leads',
                     ]),
-                    'entity'           => $this->leadRepository->find(request('lead_id')),
+                    'entity' => $this->leadRepository->find(request('lead_id')),
                 ])->render();
             }
 
@@ -345,7 +351,7 @@ class EmailController extends Controller
                     return redirect()->route('admin.mail.index', ['route' => 'inbox']);
                 }
             }
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             if (request()->ajax()) {
                 return response()->json([
                     'message' => trans('admin::app.mail.delete-failed'),
