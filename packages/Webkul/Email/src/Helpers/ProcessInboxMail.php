@@ -36,10 +36,7 @@ class ProcessInboxMail
         $headerAttributes = $header->getAttributes();
 
         if (!empty($headerAttributes['in_reply_to'])) {
-            $attachmentsExist = $this->message->hasAttachments();
-            if ($attachmentsExist) {
-                $attachments = $this->message->getAttachments();
-            }
+
             if ($this->message->hasHTMLBody()) {
                 // info("\tMessage HTML: " . $this->message->getHTMLBody());
                 $mailBody = $this->message->getHTMLBody();
@@ -94,6 +91,12 @@ class ProcessInboxMail
             ];
             if (!empty($repliedEmail->lead_id)) {
                 $emailReq = array_merge($emailReq, ['lead_id' => $repliedEmail->lead_id]);
+            }
+
+            $attachmentsExist = $this->message->hasAttachments();
+            if ($attachmentsExist) {
+                $attachments = $this->message->getAttachments();
+                $emailReq = array_merge($emailReq, ['attachments' => $attachments]);
             }
 
             $email = $this->emailRepository->findMailByMessageID($messageID);

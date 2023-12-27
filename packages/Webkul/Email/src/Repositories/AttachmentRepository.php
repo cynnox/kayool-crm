@@ -19,7 +19,7 @@ class AttachmentRepository extends Repository
      *
      * @return mixed
      */
-    function model()
+    public function model()
     {
         return 'Webkul\Email\Contracts\Attachment';
     }
@@ -42,35 +42,58 @@ class AttachmentRepository extends Repository
      */
     public function uploadAttachments($email, array $data)
     {
-        if (! isset($data['source'])) {
+        if (!isset($data['source'])) {
             return;
         }
-        
+
         if ($data['source'] == 'email') {
+            // email attachment code written by krayin developers
             foreach ($this->emailParser->getAttachments() as $attachment) {
+
                 Storage::put($path = 'emails/' . $email->id . '/' . $attachment->getFilename(), $attachment->getContent());
 
                 $this->create([
-                    'path'         => $path,
-                    'name'         => $attachment->getFileName(),
+                    'path' => $path,
+                    'name' => $attachment->getFileName(),
                     'content_type' => $attachment->contentType,
-                    'content_id'   => $attachment->contentId,
-                    'size'         => Storage::size($path),
-                    'email_id'     => $email->id,
+                    'content_id' => $attachment->contentId,
+                    'size' => Storage::size($path),
+                    'email_id' => $email->id,
                 ]);
             }
+
+            // email attach code by arun
+            if ($data['attachments'] != null) {
+                foreach ($data['attachments'] as $attachment) {
+                    $filename = $attachment->getName();
+                    $content = $attachment->getContent();
+                    $attributes = $attachment->getAttributes();
+
+                    Storage::put($path = 'emails/' . $email->id . '/' . $filename, $content);
+
+                    $attchmentDBReq = [
+                        'path' => $path,
+                        'name' => $attachment->getName(),
+                        'content_type' => $attachment->getMimeType(),
+                        'content_id' => $attributes['id'],
+                        'size' => Storage::size($path),
+                        'email_id' => $email->id,
+                    ];
+                    $this->create($attchmentDBReq);
+                }
+            }
         } else {
-            if (! isset($data['attachments'])) {
+            if (!isset($data['attachments'])) {
                 return;
             }
-            
+
             foreach ($data['attachments'] as $index => $attachment) {
                 $this->create([
-                    'path'         => $path = request()->file('attachments.' . $index)->store('emails/' . $email->id),
-                    'name'         => $attachment->getClientOriginalName(),
+                    'path' => $path = request()->file('attachments.' . $index)->store('emails/' . $email->id),
+                    'name' => $attachment->getClientOriginalName(),
                     'content_type' => $attachment->getClientMimeType(),
-                    'size'         => Storage::size($path),
-                    'email_id'     => $email->id,
+                    'size' => Storage::size($path),
+                    'email_id' => $email->id,
                 ]);
             }
         }
