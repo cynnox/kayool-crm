@@ -21,3 +21,8 @@ update project in server
 9. php artisan migrate -> if there is any new table
 10. sudo service apache2 restart
 11. sudo service nginx restart
+
+
+To listen for new emails run ->
+php artisan app:listen_imap
+
